@@ -1,20 +1,15 @@
 {
-  "name": "ludo-master-render-ready",
-  "version": "1.2.0",
-  "private": true,
-  "description": "Render-ready Ludo Master frontend and Node.js backend",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^1.4.5-lts.1"
+  "name":"ludo-master-render-ready",
+  "version":"2.0.0",
+  "private":true,
+  "main":"server.js",
+  "scripts":{"start":"node server.js"},
+  "engines":{"node":">=18"},
+  "dependencies":{
+    "bcryptjs":"^2.4.3",
+    "cors":"^2.8.5",
+    "express":"^4.21.2",
+    "jsonwebtoken":"^9.0.2",
+    "multer":"^1.4.5-lts.1"
   }
 }
