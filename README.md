@@ -1,17 +1,11 @@
-# Ludo Master — Render Backend
+# Ludo Master — Render Fixed Version
 
-এই ZIP-এ আপনার দেওয়া `index.html`-কে frontend হিসেবে রেখে Node.js/Express backend যোগ করা হয়েছে।
+## কেন এই version
+আগের version-এ `better-sqlite3` ছিল। এটি native module হওয়ায় Render build-এ `node-gyp`/compiler error হয়েছে। এই version-এ `better-sqlite3` সম্পূর্ণ বাদ দেওয়া হয়েছে।
 
-## Structure
+Database এখন `data/database.json`-এ রাখা হবে, তাই extra native build dependency নেই।
 
-- `server.js` — Express API server
-- `package.json` — dependencies + Render start command
-- `public/index.html` — আপনার original frontend
-- `uploads/` — winning screenshot upload location
-- `ludo.sqlite` — প্রথমবার server চালালে database তৈরি হবে
-- `.env.example` — environment variable example
-
-## Render
+## Render settings
 
 Build Command:
 ```bash
@@ -23,22 +17,19 @@ Start Command:
 npm start
 ```
 
-অথবা:
-```bash
-node server.js
+Environment Variable:
+```text
+JWT_SECRET=একটি-দীর্ঘ-random-secret
 ```
-
-Environment Variables:
-- `JWT_SECRET` = একটি শক্ত random secret
 
 ## গুরুত্বপূর্ণ
+এই backend আপনার বর্তমান `index.html`-এর `/user/...`, `/matches`, `/deposit`, `/withdraw`, `/transactions`, `/winning`, `/support` path-এর সাথে compatibility routes দিয়েছে।
 
-আপনার frontend-এর বর্তমান `API_BASE` এখন `YOUR_BACKEND_API_URL`। Render-এ একই service-এ frontend ও backend একসাথে চালালে এটি relative API path ব্যবহার করার জন্য পরিবর্তন করা ভালো:
+তবে production app-এর জন্য Render-এর persistent disk/database ব্যবহার করা ভালো। Free web service restart/redeploy হলে local JSON/uploads স্থায়ী নাও থাকতে পারে।
 
-```js
-const API_BASE = "";
+## Test
+Deploy হওয়ার পর:
+```text
+https://YOUR-RENDER-SERVICE.onrender.com/api/health
 ```
-
-তাহলে `/api/...` endpoint ঠিকভাবে কাজ করবে না, কারণ বর্তমান frontend `/user/profile`-এর মতো path call করছে। তাই frontend-এর API paths `/api/...` করা অথবা server-এ `/user/...` aliases যোগ করা প্রয়োজন।
-
-এই package-এ backend-এর `/api/...` routes রাখা হয়েছে। Deploy করার আগে frontend-এর API_BASE এবং route prefix একবার মিলিয়ে নিন।
+এ গেলে JSON-এ backend running দেখাবে।
