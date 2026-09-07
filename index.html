@@ -264,7 +264,7 @@ placeholder="আপনার সমস্যা লিখুন"></textarea>
    BACKEND API
 ================================ */
 
-const API_BASE = "YOUR_BACKEND_API_URL";
+const API_BASE = "";
 
 /*
 Example:
@@ -373,7 +373,7 @@ options.headers={
 ...(token?{"Authorization":"Bearer "+token}:{})
 };
 
-const res=await fetch(API_BASE+path,options);
+const res=await fetch(API_BASE+"/api"+path,options);
 
 if(!res.ok) throw new Error("API Error");
 
@@ -680,7 +680,7 @@ try{
 
 const token=localStorage.getItem("token");
 
-const res=await fetch(API_BASE+"/winning",{
+const res=await fetch(API_BASE+"/api/winning",{
 method:"POST",
 headers:token?{
 "Authorization":"Bearer "+token

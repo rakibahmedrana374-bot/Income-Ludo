@@ -1,8 +1,8 @@
 {
-  "name": "ludo-master-render-backend",
-  "version": "1.1.0",
+  "name": "ludo-master-render-ready",
+  "version": "1.2.0",
   "private": true,
-  "description": "Render-ready Node.js backend for Ludo Master",
+  "description": "Render-ready Ludo Master frontend and Node.js backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

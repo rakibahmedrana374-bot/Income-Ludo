@@ -1,35 +1,41 @@
-# Ludo Master — Render Fixed Version
+# Ludo Master — Render Ready
 
-## কেন এই version
-আগের version-এ `better-sqlite3` ছিল। এটি native module হওয়ায় Render build-এ `node-gyp`/compiler error হয়েছে। এই version-এ `better-sqlite3` সম্পূর্ণ বাদ দেওয়া হয়েছে।
+## Files
+- `index.html` — frontend
+- `server.js` — Node.js/Express backend
+- `package.json` — Render dependencies/start command
+- `.env.example` — environment variable example
+- `data/` — JSON database is created automatically
+- `uploads/` — winning screenshots are stored here
 
-Database এখন `data/database.json`-এ রাখা হবে, তাই extra native build dependency নেই।
-
-## Render settings
-
+## Render
 Build Command:
-```bash
+```text
 npm install
 ```
 
 Start Command:
-```bash
+```text
 npm start
 ```
 
 Environment Variable:
 ```text
-JWT_SECRET=একটি-দীর্ঘ-random-secret
+JWT_SECRET=your-long-random-secret
 ```
-
-## গুরুত্বপূর্ণ
-এই backend আপনার বর্তমান `index.html`-এর `/user/...`, `/matches`, `/deposit`, `/withdraw`, `/transactions`, `/winning`, `/support` path-এর সাথে compatibility routes দিয়েছে।
-
-তবে production app-এর জন্য Render-এর persistent disk/database ব্যবহার করা ভালো। Free web service restart/redeploy হলে local JSON/uploads স্থায়ী নাও থাকতে পারে।
 
 ## Test
-Deploy হওয়ার পর:
+After deployment open:
 ```text
-https://YOUR-RENDER-SERVICE.onrender.com/api/health
+https://YOUR-SERVICE.onrender.com/api/health
 ```
-এ গেলে JSON-এ backend running দেখাবে।
+
+It should return:
+```json
+{"success":true,"message":"Ludo Master backend is running"}
+```
+
+The frontend is served from `/` and uses the same Render service for `/api/...`.
+
+IMPORTANT:
+This JSON database is suitable for testing/demo deployment. Local files on some Render plans can be lost after service replacement/redeploy. For a real money app, use a persistent database and proper admin/security controls.
