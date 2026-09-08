@@ -39,3 +39,7 @@ The frontend is served from `/` and uses the same Render service for `/api/...`.
 
 IMPORTANT:
 This JSON database is suitable for testing/demo deployment. Local files on some Render plans can be lost after service replacement/redeploy. For a real money app, use a persistent database and proper admin/security controls.
+
+
+## Login System
+A login/registration gate is enabled. The main app interface is hidden until a valid account session is established; the existing JWT-protected profile API validates the session.

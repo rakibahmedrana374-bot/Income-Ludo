@@ -59,10 +59,49 @@ display:flex;justify-content:space-around;padding:9px 0;z-index:10
 .brand-row{display:flex;align-items:center;gap:12px}
 .brand-logo{width:58px;height:58px;border-radius:50%;object-fit:cover;box-shadow:0 3px 12px #00000030}
 .brand-row h1{font-size:23px}
+
+/* AUTH / LOGIN GATE */
+.auth-screen{min-height:100vh;width:100%;display:flex;align-items:center;justify-content:center;padding:20px;background:#07133d url("/assets/login-background.jpg") center/cover no-repeat fixed;position:fixed;inset:0;z-index:9999;overflow:auto}
+.auth-screen:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(3,18,70,.72),rgba(3,35,105,.50))}
+.auth-card{position:relative;width:min(430px,100%);padding:28px 22px 24px;border:1px solid rgba(56,189,248,.8);border-radius:28px;background:rgba(4,22,66,.86);box-shadow:0 20px 70px rgba(0,0,0,.45),0 0 35px rgba(14,165,233,.25);backdrop-filter:blur(10px);color:#fff}
+.auth-brand{text-align:center;margin-bottom:20px}.auth-brand img{width:96px;height:96px;border-radius:22px;object-fit:cover;box-shadow:0 8px 25px rgba(0,0,0,.35);margin-bottom:8px}.auth-brand h1{font-size:30px;margin:0 0 4px}.auth-brand p{font-size:13px;color:#cfe8ff}
+.auth-card label{display:block;margin-top:10px;color:#e5f2ff;font-size:14px}.auth-card input{background:rgba(7,30,80,.86);color:#fff;border:1px solid #2299ff;margin:7px 0 8px}.auth-card input::placeholder{color:#b6cae6}
+.auth-btn{width:100%;padding:14px;margin-top:10px;border-radius:12px;background:linear-gradient(90deg,#0ea5e9,#2563eb);color:#fff;font-weight:700;font-size:17px;box-shadow:0 5px 20px rgba(14,165,233,.25)}
+.auth-switch{text-align:center;margin-top:17px;font-size:14px;color:#c9d8ee}.auth-switch button{background:none;color:#38d9ff;font-weight:700;margin-left:5px}
+.auth-error,.auth-success{padding:10px;border-radius:9px;font-size:13px;margin:10px 0;display:none}.auth-error{background:rgba(220,38,38,.16);border:1px solid rgba(248,113,113,.5);color:#fecaca}.auth-success{background:rgba(22,163,74,.16);border:1px solid rgba(74,222,128,.5);color:#bbf7d0}
 </style>
 </head>
 
 <body>
+
+<!-- AUTHENTICATION GATE -->
+<div id="authScreen" class="auth-screen">
+ <div class="auth-card">
+  <div class="auth-brand">
+   <img src="/assets/income-ludo-logo.png" alt="Income Ludo">
+   <h1>Income Ludo</h1><p>Play • Earn • Grow</p>
+  </div>
+  <div id="loginBox">
+   <h3 style="margin-bottom:10px">🔐 Login</h3>
+   <label>Mobile Number</label><input id="loginMobile" type="tel" placeholder="01XXXXXXXXX" autocomplete="username">
+   <label>Password</label><input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
+   <div id="loginError" class="auth-error"></div>
+   <button class="auth-btn" onclick="loginUser()">Login</button>
+   <div class="auth-switch">Don't have an account? <button type="button" onclick="showAuth('register')">Sign Up</button></div>
+  </div>
+  <div id="registerBox" class="hidden">
+   <h3 style="margin-bottom:10px">📝 Create Account</h3>
+   <label>Name</label><input id="registerName" type="text" placeholder="Your name" autocomplete="name">
+   <label>Mobile Number</label><input id="registerMobile" type="tel" placeholder="01XXXXXXXXX" autocomplete="tel">
+   <label>Password</label><input id="registerPassword" type="password" placeholder="Create password" autocomplete="new-password">
+   <div id="registerError" class="auth-error"></div>
+   <div id="registerSuccess" class="auth-success"></div>
+   <button class="auth-btn" onclick="registerUser()">Create Account</button>
+   <div class="auth-switch">Already have an account? <button type="button" onclick="showAuth('login')">Login</button></div>
+  </div>
+ </div>
+</div>
+
 
 <div class="app">
 
@@ -281,6 +320,31 @@ Example:
 const API_BASE = "https://yourdomain.com/api";
 */
 
+
+/* AUTHENTICATION GATE */
+function setAuthVisible(show){const e=document.getElementById("authScreen");if(e)e.style.display=show?"flex":"none";}
+function showAuth(mode){document.getElementById("loginBox").classList.toggle("hidden",mode!=="login");document.getElementById("registerBox").classList.toggle("hidden",mode!=="register");authMessage("loginError","");authMessage("registerError","");}
+function authMessage(id,msg){const e=document.getElementById(id);if(e){e.innerText=msg;e.style.display=msg?"block":"none";}}
+async function loginUser(){
+ const mobile=document.getElementById("loginMobile").value.trim(),password=document.getElementById("loginPassword").value;
+ if(!mobile||!password){authMessage("loginError","Mobile number ও password দিন");return;}
+ try{const r=await fetch(API_BASE+"/api/auth/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mobile,password})});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.message||"Login failed");localStorage.setItem("token",d.token);setAuthVisible(false);loadAppData();}
+ catch(e){authMessage("loginError",e.message||"Login failed");}
+}
+async function registerUser(){
+ const name=document.getElementById("registerName").value.trim(),mobile=document.getElementById("registerMobile").value.trim(),password=document.getElementById("registerPassword").value;
+ if(!name||!mobile||!password){authMessage("registerError","সব তথ্য পূরণ করুন");return;}
+ if(password.length<6){authMessage("registerError","Password কমপক্ষে 6 অক্ষরের হতে হবে");return;}
+ try{const r=await fetch(API_BASE+"/api/auth/register",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,mobile,password})});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.message||"Registration failed");localStorage.setItem("token",d.token);setAuthVisible(false);loadAppData();}
+ catch(e){authMessage("registerError",e.message||"Registration failed");}
+}
+async function checkLogin(){
+ const token=localStorage.getItem("token");if(!token){setAuthVisible(true);showAuth("login");return false;}
+ try{const r=await fetch(API_BASE+"/api/user/profile",{headers:{"Authorization":"Bearer "+token}});if(!r.ok)throw new Error();setAuthVisible(false);return true;}
+ catch(e){localStorage.removeItem("token");setAuthVisible(true);showAuth("login");authMessage("loginError","Session expired. আবার Login করুন");return false;}
+}
+function loadAppData(){loadUser();loadBalance();loadMatches();loadHistory();}
+
 /* ================================
    PAGE SYSTEM
 ================================ */
@@ -317,19 +381,12 @@ window.scrollTo(0,0);
 
 /* Refresh করলে একই page থাকবে */
 
-window.addEventListener("load",()=>{
-
-const last=localStorage.getItem("lastPage");
-
-if(last && pages.includes(last)){
-showPage(last);
-}
-
-loadUser();
-loadBalance();
-loadMatches();
-loadHistory();
-
+window.addEventListener("load",async ()=>{
+ const loggedIn=await checkLogin();
+ if(!loggedIn)return;
+ const last=localStorage.getItem("lastPage");
+ if(last && pages.includes(last)) showPage(last);
+ loadAppData();
 });
 
 /* ================================
