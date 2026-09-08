@@ -1,39 +1,763 @@
 <!DOCTYPE html>
 <html lang="bn">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Ludo Master</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#f3f5f9;color:#222}.app{max-width:500px;margin:auto;min-height:100vh;background:#f3f5f9;padding-bottom:75px}header{background:#5b21b6;color:#fff;padding:18px 16px}header h1{font-size:23px}header p{margin-top:5px;font-size:13px;opacity:.9}.balance{margin:15px;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;border-radius:18px;padding:20px}.balance h2{font-size:28px;margin:8px 0}.balances{display:flex;gap:10px}.balbox{flex:1;background:rgba(255,255,255,.15);padding:10px;border-radius:10px}.balbox small{display:block;opacity:.8}.balbox b{font-size:17px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px}.action{background:#fff;border-radius:14px;padding:17px;text-align:center;box-shadow:0 2px 8px #0001}.action span{font-size:27px;display:block;margin-bottom:7px}.section{display:none;padding:15px}.section.active{display:block}.card{background:#fff;border-radius:15px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px #0001}.card h3{margin-bottom:12px}input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;margin:6px 0 12px;font-size:15px}.primary{width:100%;padding:13px;background:#5b21b6;color:#fff;border-radius:9px;font-size:16px}.secondary{padding:10px;background:#eee;border-radius:8px}.match{border:1px solid #eee;border-radius:12px;padding:14px;margin-bottom:12px}.row{display:flex;justify-content:space-between;margin:7px 0}.badge{background:#ede9fe;color:#5b21b6;padding:5px 9px;border-radius:20px;font-size:12px}.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;background:#fff;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:9px 0;z-index:10}.nav{background:none;color:#666;font-size:11px}.nav.active{color:#5b21b6;font-weight:bold}.nav span{display:block;font-size:21px;margin-bottom:2px}.copy{background:#eee;padding:8px;border-radius:7px;font-size:13px;margin-top:8px}.success{color:#16a34a}.danger{color:#dc2626}
-</style></head><body><div class="app"><header><h1>🎲 Ludo Master</h1><p>লুডু খেলুন • Tournament খেলুন • Win করুন</p></header>
-<section id="home" class="section active"><div class="balance"><small>Available Balance</small><h2>৳ <span id="totalBalance">0.00</span></h2><div class="balances"><div class="balbox"><small>Gaming Balance</small><b>৳ <span id="gamingBalance">0.00</span></b></div><div class="balbox"><small>Winning Balance</small><b>৳ <span id="winningBalance">0.00</span></b></div></div></div>
-<div class="actions"><button class="action" onclick="showPage('deposit')"><span>➕</span>Deposit</button><button class="action" onclick="showPage('withdraw')"><span>💸</span>Withdraw</button><button class="action" onclick="showPage('matches')"><span>🎮</span>Tournament</button><button class="action" onclick="showPage('history')"><span>🧾</span>History</button></div>
-<div class="card"><h3>📢 Announcement</h3><p id="announcement">স্বাগতম Ludo Master-এ ❤️</p></div><div class="card"><h3>🔥 Upcoming Matches</h3><div id="homeMatches">Loading...</div></div></section>
-<section id="matches" class="section"><div class="card"><h3>🎮 Tournament</h3><div id="matchList">Loading matches...</div></div></section>
-<section id="deposit" class="section"><div class="card"><h3>➕ Deposit</h3><label>Payment Method</label><select id="depositMethod" onchange="paymentNumber()"><option value="bkash">bKash</option><option value="nagad">Nagad</option></select><div class="copy">Payment Number: <b id="paymentNumber">01301470686</b> <button class="secondary" onclick="copyNumber()">Copy</button></div><label>Amount</label><input id="depositAmount" type="number" placeholder="Enter amount"><label>Transaction ID</label><input id="trxId" placeholder="Enter Transaction ID"><button class="primary" onclick="submitDeposit()">Submit Deposit</button></div></section>
-<section id="withdraw" class="section"><div class="card"><h3>💸 Withdraw</h3><label>Payment Method</label><select id="withdrawMethod"><option value="bkash">bKash</option><option value="nagad">Nagad</option></select><label>Number</label><input id="withdrawNumber" placeholder="01XXXXXXXXX"><label>Amount</label><input id="withdrawAmount" type="number" placeholder="Enter amount"><button class="primary" onclick="submitWithdraw()">Request Withdraw</button></div></section>
-<section id="history" class="section"><div class="card"><h3>🧾 Transaction History</h3><div id="historyList">Loading...</div></div></section>
-<section id="winning" class="section"><div class="card"><h3>🏆 Winning Verification</h3><label>Match ID</label><input id="winMatchId" placeholder="Match ID"><label>Room ID</label><input id="winRoomId" placeholder="Room ID"><label>Winning Screenshot</label><input id="winScreenshot" type="file" accept="image/*"><button class="primary" onclick="submitWinning()">Submit Winning</button></div></section>
-<section id="profile" class="section"><div class="card"><h3>👤 Profile</h3><p>Name: <b id="userName">User</b></p><p>Mobile: <b id="userMobile">---</b></p><br><button class="primary" onclick="logout()">Logout</button></div><div class="card"><h3>🎁 Referral</h3><p>Your Referral Code</p><div class="copy" id="refCode">---</div><br><button class="secondary" onclick="copyReferral()">Copy Referral</button></div></section>
-<section id="support" class="section"><div class="card"><h3>💬 Support</h3><textarea id="supportMessage" rows="5" placeholder="আপনার সমস্যা লিখুন"></textarea><button class="primary" onclick="sendSupport()">Send Message</button></div></section>
-<nav class="bottom"><button class="nav active" onclick="showPage('home',this)"><span>🏠</span>Home</button><button class="nav" onclick="showPage('matches',this)"><span>🎮</span>Match</button><button class="nav" onclick="showPage('winning',this)"><span>🏆</span>Winning</button><button class="nav" onclick="showPage('support',this)"><span>💬</span>Support</button><button class="nav" onclick="showPage('profile',this)"><span>👤</span>Profile</button></nav></div>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f3f5f9;color:#222}
+button{border:0;cursor:pointer}
+.app{max-width:500px;margin:auto;min-height:100vh;background:#f3f5f9;padding-bottom:75px}
+header{background:#5b21b6;color:white;padding:18px 16px}
+header h1{font-size:23px}
+header p{margin-top:5px;font-size:13px;opacity:.9}
+
+.balance{margin:15px;background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;border-radius:18px;padding:20px}
+.balance h2{font-size:28px;margin:8px 0}
+.balances{display:flex;gap:10px}
+.balbox{flex:1;background:rgba(255,255,255,.15);padding:10px;border-radius:10px}
+.balbox small{display:block;opacity:.8}
+.balbox b{font-size:17px}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px}
+.action{background:white;border-radius:14px;padding:17px;text-align:center;box-shadow:0 2px 8px #00000010}
+.action span{font-size:27px;display:block;margin-bottom:7px}
+
+.section{display:none;padding:15px}
+.section.active{display:block}
+.card{background:white;border-radius:15px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px #00000010}
+.card h3{margin-bottom:12px}
+
+input,select,textarea{
+ width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;
+ margin:6px 0 12px;font-size:15px
+}
+.primary{width:100%;padding:13px;background:#5b21b6;color:#fff;border-radius:9px;font-size:16px}
+.secondary{padding:10px;background:#eee;border-radius:8px}
+
+.match{border:1px solid #eee;border-radius:12px;padding:14px;margin-bottom:12px}
+.match .row{display:flex;justify-content:space-between;margin:7px 0}
+.badge{background:#ede9fe;color:#5b21b6;padding:5px 9px;border-radius:20px;font-size:12px}
+
+.bottom{
+position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+width:100%;max-width:500px;background:#fff;border-top:1px solid #ddd;
+display:flex;justify-content:space-around;padding:9px 0;z-index:10
+}
+.nav{background:none;color:#666;font-size:11px}
+.nav.active{color:#5b21b6;font-weight:bold}
+.nav span{display:block;font-size:21px;margin-bottom:2px}
+
+.hidden{display:none!important}
+.copy{background:#eee;padding:8px;border-radius:7px;font-size:13px;margin-top:8px}
+.danger{color:#dc2626}
+.success{color:#16a34a}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+<h1>🎲 Ludo Master</h1>
+<p>লুডু খেলুন • Tournament খেলুন • Win করুন</p>
+</header>
+
+<!-- HOME -->
+<section id="home" class="section active">
+
+<div class="balance">
+<small>Available Balance</small>
+<h2>৳ <span id="totalBalance">0.00</span></h2>
+
+<div class="balances">
+<div class="balbox">
+<small>Gaming Balance</small>
+<b>৳ <span id="gamingBalance">0.00</span></b>
+</div>
+<div class="balbox">
+<small>Winning Balance</small>
+<b>৳ <span id="winningBalance">0.00</span></b>
+</div>
+</div>
+</div>
+
+<div class="actions">
+<button class="action" onclick="showPage('deposit')">
+<span>➕</span>Deposit
+</button>
+
+<button class="action" onclick="showPage('withdraw')">
+<span>💸</span>Withdraw
+</button>
+
+<button class="action" onclick="showPage('matches')">
+<span>🎮</span>Tournament
+</button>
+
+<button class="action" onclick="showPage('history')">
+<span>🧾</span>History
+</button>
+</div>
+
+<div class="card">
+<h3>📢 Announcement</h3>
+<p id="announcement">স্বাগতম Ludo Master-এ ❤️</p>
+</div>
+
+<div class="card">
+<h3>🔥 Upcoming Matches</h3>
+<div id="homeMatches">Loading...</div>
+</div>
+
+</section>
+
+<!-- MATCHES -->
+<section id="matches" class="section">
+<div class="card">
+<h3>🎮 Tournament</h3>
+<div id="matchList">Loading matches...</div>
+</div>
+</section>
+
+<!-- DEPOSIT -->
+<section id="deposit" class="section">
+<div class="card">
+<h3>➕ Deposit</h3>
+
+<label>Payment Method</label>
+<select id="depositMethod" onchange="paymentNumber()">
+<option value="bkash">bKash</option>
+<option value="nagad">Nagad</option>
+</select>
+
+<div class="copy">
+Payment Number:
+<b id="paymentNumber">01301470686</b>
+<button class="secondary" onclick="copyNumber()">Copy</button>
+</div>
+
+<label>Amount</label>
+<input id="depositAmount" type="number" placeholder="Enter amount">
+
+<label>Transaction ID</label>
+<input id="trxId" placeholder="Enter Transaction ID">
+
+<button class="primary" onclick="submitDeposit()">Submit Deposit</button>
+</div>
+</section>
+
+<!-- WITHDRAW -->
+<section id="withdraw" class="section">
+<div class="card">
+<h3>💸 Withdraw</h3>
+
+<label>Payment Method</label>
+<select id="withdrawMethod">
+<option value="bkash">bKash</option>
+<option value="nagad">Nagad</option>
+</select>
+
+<label>Number</label>
+<input id="withdrawNumber" placeholder="01XXXXXXXXX">
+
+<label>Amount</label>
+<input id="withdrawAmount" type="number" placeholder="Enter amount">
+
+<button class="primary" onclick="submitWithdraw()">Request Withdraw</button>
+</div>
+</section>
+
+<!-- HISTORY -->
+<section id="history" class="section">
+<div class="card">
+<h3>🧾 Transaction History</h3>
+<div id="historyList">Loading...</div>
+</div>
+</section>
+
+<!-- WINNING -->
+<section id="winning" class="section">
+<div class="card">
+<h3>🏆 Winning Verification</h3>
+
+<label>Match ID</label>
+<input id="winMatchId" placeholder="Match ID">
+
+<label>Room ID</label>
+<input id="winRoomId" placeholder="Room ID">
+
+<label>Winning Screenshot</label>
+<input id="winScreenshot" type="file" accept="image/*">
+
+<button class="primary" onclick="submitWinning()">Submit Winning</button>
+</div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="section">
+<div class="card">
+<h3>👤 Profile</h3>
+
+<p>Name: <b id="userName">User</b></p>
+<p style="margin-top:8px">Mobile: <b id="userMobile">---</b></p>
+
+<br>
+
+<button class="primary" onclick="logout()">Logout</button>
+</div>
+
+<div class="card">
+<h3>🎁 Referral</h3>
+<p>Your Referral Code</p>
+<div class="copy" id="refCode">---</div>
+<br>
+<button class="secondary" onclick="copyReferral()">Copy Referral</button>
+</div>
+</section>
+
+<!-- SUPPORT -->
+<section id="support" class="section">
+<div class="card">
+<h3>💬 Support</h3>
+
+<textarea id="supportMessage" rows="5"
+placeholder="আপনার সমস্যা লিখুন"></textarea>
+
+<button class="primary" onclick="sendSupport()">Send Message</button>
+</div>
+</section>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom">
+
+<button class="nav active" onclick="showPage('home',this)">
+<span>🏠</span>Home
+</button>
+
+<button class="nav" onclick="showPage('matches',this)">
+<span>🎮</span>Match
+</button>
+
+<button class="nav" onclick="showPage('winning',this)">
+<span>🏆</span>Winning
+</button>
+
+<button class="nav" onclick="showPage('support',this)">
+<span>💬</span>Support
+</button>
+
+<button class="nav" onclick="showPage('profile',this)">
+<span>👤</span>Profile
+</button>
+
+</nav>
+
+</div>
+
 <script>
-const pages=["home","matches","deposit","withdraw","history","winning","profile","support"];
-function showPage(page,button){pages.forEach(p=>document.getElementById(p)?.classList.remove("active"));document.getElementById(page)?.classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));if(button)button.classList.add("active");localStorage.setItem("lastPage",page);scrollTo(0,0)}
-const payments={bkash:"01301470686",nagad:"01806097369"};
-function paymentNumber(){document.getElementById("paymentNumber").innerText=payments[document.getElementById("depositMethod").value]}
-function copyNumber(){navigator.clipboard.writeText(document.getElementById("paymentNumber").innerText);alert("Number copied")}
-function copyReferral(){navigator.clipboard.writeText(document.getElementById("refCode").innerText);alert("Referral code copied")}
-async function api(p,o={}){try{const t=localStorage.getItem("token");o.headers={"Content-Type":"application/json",...(o.headers||{}),...(t?{"Authorization":"Bearer "+t}:{})};const r=await fetch("/api"+p,o);const d=await r.json();if(!r.ok)throw new Error(d.message||"API Error");return d}catch(e){console.error(e);return null}}
-async function loadUser(){const d=await api("/user/profile");if(d){userName.innerText=d.name||"User";userMobile.innerText=d.mobile||"---";refCode.innerText=d.referral_code||"---"}}
-async function loadBalance(){const d=await api("/user/balance");if(d){const g=+d.gaming_balance||0,w=+d.winning_balance||0;gamingBalance.innerText=g.toFixed(2);winningBalance.innerText=w.toFixed(2);totalBalance.innerText=(g+w).toFixed(2)}}
-async function loadMatches(){const d=await api("/matches");const ms=d?.matches||[];let h=ms.map(m=>`<div class="match"><div class="row"><b>${esc(m.title||"Ludo Match")}</b><span class="badge">${esc(m.status||"upcoming")}</span></div><div class="row"><span>Entry Fee</span><b>৳${m.entry_fee||0}</b></div><div class="row"><span>Prize</span><b>৳${m.prize||0}</b></div><div class="row"><span>Players</span><b>${m.players||0}/${m.max_players||0}</b></div><div class="row"><span>Time</span><b>${esc(m.time||"---")}</b></div><button class="primary" onclick="joinMatch('${m.id}')">Join Match</button></div>`).join("");matchList.innerHTML=h||"<p>No matches available</p>";homeMatches.innerHTML=h||"<p>No upcoming matches</p>"}
-async function joinMatch(i){if(!confirm("এই ম্যাচে Join করতে চান?"))return;const d=await api("/matches/"+i+"/join",{method:"POST"});alert(d?.message||(d?.success?"Match joined successfully":"Join failed"));if(d?.success){loadBalance();loadMatches();loadHistory()}}
-async function submitDeposit(){const method=depositMethod.value,amount=depositAmount.value,trx=trxId.value;if(!amount||!trx)return alert("সব তথ্য পূরণ করুন");const d=await api("/deposit",{method:"POST",body:JSON.stringify({method,amount,transaction_id:trx})});alert(d?.message||(d?.success?"Deposit request submitted":"Deposit failed"));if(d?.success){depositAmount.value="";trxId.value="";loadHistory()}}
-async function submitWithdraw(){const method=withdrawMethod.value,number=withdrawNumber.value,amount=withdrawAmount.value;if(!number||!amount)return alert("সব তথ্য পূরণ করুন");const d=await api("/withdraw",{method:"POST",body:JSON.stringify({method,number,amount})});alert(d?.message||(d?.success?"Withdraw request submitted":"Withdraw failed"));if(d?.success){withdrawNumber.value="";withdrawAmount.value="";loadBalance();loadHistory()}}
-async function loadHistory(){const d=await api("/transactions");const l=d?.transactions||[];historyList.innerHTML=l.map(x=>`<div class="card"><b>${esc(x.type||"Transaction")}</b><p>Amount: ৳${x.amount||0}</p><p>Status: <span class="${x.status==="approved"?"success":"danger"}">${esc(x.status||"pending")}</span></p></div>`).join("")||"<p>No transaction history</p>"}
-async function submitWinning(){const f=winScreenshot.files[0];if(!winMatchId.value||!winRoomId.value||!f)return alert("সব তথ্য দিন");const form=new FormData();form.append("match_id",winMatchId.value);form.append("room_id",winRoomId.value);form.append("screenshot",f);const t=localStorage.getItem("token");const r=await fetch("/api/winning",{method:"POST",headers:t?{"Authorization":"Bearer "+t}:{},body:form});const d=await r.json();alert(d.message||(d.success?"Winning submitted successfully":"Submission failed"))}
-async function sendSupport(){const message=supportMessage.value;if(!message)return alert("Message লিখুন");const d=await api("/support",{method:"POST",body:JSON.stringify({message})});alert(d?.message||(d?.success?"Message sent":"Failed"));if(d?.success)supportMessage.value=""}
-function logout(){localStorage.clear();location.reload()}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-window.addEventListener("load",()=>{const l=localStorage.getItem("lastPage");if(l&&pages.includes(l))showPage(l);loadUser();loadBalance();loadMatches();loadHistory()})
-</script></body></html>
+
+/* ================================
+   BACKEND API
+================================ */
+
+const API_BASE = "https://income-ludo-1.onrender.com";
+
+/*
+Example:
+const API_BASE = "https://yourdomain.com/api";
+*/
+
+/* ================================
+   PAGE SYSTEM
+================================ */
+
+const pages=[
+"home",
+"matches",
+"deposit",
+"withdraw",
+"history",
+"winning",
+"profile",
+"support"
+];
+
+function showPage(page,button){
+
+pages.forEach(p=>{
+const el=document.getElementById(p);
+if(el) el.classList.remove("active");
+});
+
+const target=document.getElementById(page);
+if(target) target.classList.add("active");
+
+document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));
+
+if(button) button.classList.add("active");
+
+localStorage.setItem("lastPage",page);
+
+window.scrollTo(0,0);
+}
+
+/* Refresh করলে একই page থাকবে */
+
+window.addEventListener("load",()=>{
+
+const last=localStorage.getItem("lastPage");
+
+if(last && pages.includes(last)){
+showPage(last);
+}
+
+loadUser();
+loadBalance();
+loadMatches();
+loadHistory();
+
+});
+
+/* ================================
+   PAYMENT
+================================ */
+
+const payments={
+bkash:"01301470686",
+nagad:"01806097369"
+};
+
+function paymentNumber(){
+
+const method=document.getElementById("depositMethod").value;
+
+document.getElementById("paymentNumber").innerText=
+payments[method];
+}
+
+function copyNumber(){
+
+const number=document.getElementById("paymentNumber").innerText;
+
+navigator.clipboard.writeText(number);
+
+alert("Number copied");
+}
+
+function copyReferral(){
+
+const code=document.getElementById("refCode").innerText;
+
+navigator.clipboard.writeText(code);
+
+alert("Referral code copied");
+}
+
+/* ================================
+   API HELPER
+================================ */
+
+async function api(path,options={}){
+
+try{
+
+const token=localStorage.getItem("token");
+
+options.headers={
+"Content-Type":"application/json",
+...(options.headers||{}),
+...(token?{"Authorization":"Bearer "+token}:{})
+};
+
+const res=await fetch(API_BASE+"/api"+path,options);
+
+if(!res.ok) throw new Error("API Error");
+
+return await res.json();
+
+}catch(error){
+
+console.error(error);
+
+return null;
+
+}
+
+}
+
+/* ================================
+   USER
+================================ */
+
+async function loadUser(){
+
+const data=await api("/user/profile");
+
+if(!data)return;
+
+document.getElementById("userName").innerText=data.name||"User";
+document.getElementById("userMobile").innerText=data.mobile||"---";
+document.getElementById("refCode").innerText=data.referral_code||"---";
+}
+
+/* ================================
+   BALANCE
+================================ */
+
+async function loadBalance(){
+
+const data=await api("/user/balance");
+
+if(!data)return;
+
+const gaming=Number(data.gaming_balance||0);
+const winning=Number(data.winning_balance||0);
+
+document.getElementById("gamingBalance").innerText=
+gaming.toFixed(2);
+
+document.getElementById("winningBalance").innerText=
+winning.toFixed(2);
+
+document.getElementById("totalBalance").innerText=
+(gaming+winning).toFixed(2);
+
+}
+
+/* ================================
+   MATCHES
+================================ */
+
+async function loadMatches(){
+
+const data=await api("/matches");
+
+if(!data){
+
+document.getElementById("matchList").innerHTML=
+"<p>No matches available</p>";
+
+return;
+}
+
+const matches=data.matches||data;
+
+let html="";
+
+matches.forEach(match=>{
+
+html+=`
+
+<div class="match">
+
+<div class="row">
+<b>${match.title||"Ludo Match"}</b>
+<span class="badge">${match.status||"Upcoming"}</span>
+</div>
+
+<div class="row">
+<span>Entry Fee</span>
+<b>৳${match.entry_fee||0}</b>
+</div>
+
+<div class="row">
+<span>Prize</span>
+<b>৳${match.prize||0}</b>
+</div>
+
+<div class="row">
+<span>Players</span>
+<b>${match.players||0}/${match.max_players||0}</b>
+</div>
+
+<div class="row">
+<span>Time</span>
+<b>${match.time||"---"}</b>
+</div>
+
+<button class="primary"
+onclick="joinMatch('${match.id}')">
+Join Match
+</button>
+
+</div>
+`;
+
+});
+
+document.getElementById("matchList").innerHTML=
+html||"<p>No matches available</p>";
+
+document.getElementById("homeMatches").innerHTML=
+html||"<p>No upcoming matches</p>";
+
+}
+
+/* ================================
+   JOIN MATCH
+================================ */
+
+async function joinMatch(id){
+
+if(!confirm("এই ম্যাচে Join করতে চান?"))return;
+
+const data=await api("/matches/"+id+"/join",{
+method:"POST"
+});
+
+if(data && data.success){
+
+alert("Match joined successfully");
+
+loadBalance();
+loadMatches();
+
+}else{
+
+alert(data?.message||"Join failed");
+
+}
+
+}
+
+/* ================================
+   DEPOSIT
+================================ */
+
+async function submitDeposit(){
+
+const method=document.getElementById("depositMethod").value;
+const amount=document.getElementById("depositAmount").value;
+const trx=document.getElementById("trxId").value;
+
+if(!amount || !trx){
+
+alert("সব তথ্য পূরণ করুন");
+
+return;
+}
+
+const data=await api("/deposit",{
+method:"POST",
+body:JSON.stringify({
+method,
+amount,
+transaction_id:trx
+})
+});
+
+if(data?.success){
+
+alert("Deposit request submitted");
+
+document.getElementById("depositAmount").value="";
+document.getElementById("trxId").value="";
+
+}else{
+
+alert(data?.message||"Deposit failed");
+
+}
+
+}
+
+/* ================================
+   WITHDRAW
+================================ */
+
+async function submitWithdraw(){
+
+const method=document.getElementById("withdrawMethod").value;
+const number=document.getElementById("withdrawNumber").value;
+const amount=document.getElementById("withdrawAmount").value;
+
+if(!number || !amount){
+
+alert("সব তথ্য পূরণ করুন");
+
+return;
+}
+
+const data=await api("/withdraw",{
+method:"POST",
+body:JSON.stringify({
+method,
+number,
+amount
+})
+});
+
+if(data?.success){
+
+alert("Withdraw request submitted");
+
+document.getElementById("withdrawNumber").value="";
+document.getElementById("withdrawAmount").value="";
+
+loadBalance();
+
+}else{
+
+alert(data?.message||"Withdraw failed");
+
+}
+
+}
+
+/* ================================
+   HISTORY
+================================ */
+
+async function loadHistory(){
+
+const data=await api("/transactions");
+
+if(!data)return;
+
+const list=data.transactions||data;
+
+let html="";
+
+list.forEach(item=>{
+
+html+=`
+
+<div class="card">
+
+<b>${item.type||"Transaction"}</b>
+
+<p>Amount: ৳${item.amount||0}</p>
+
+<p>Status:
+<span class="${item.status==="approved"?"success":"danger"}">
+${item.status||"pending"}
+</span>
+</p>
+
+</div>
+`;
+
+});
+
+document.getElementById("historyList").innerHTML=
+html||"<p>No transaction history</p>";
+
+}
+
+/* ================================
+   WINNING
+================================ */
+
+async function submitWinning(){
+
+const matchId=document.getElementById("winMatchId").value;
+const roomId=document.getElementById("winRoomId").value;
+const file=document.getElementById("winScreenshot").files[0];
+
+if(!matchId || !roomId || !file){
+
+alert("সব তথ্য দিন");
+
+return;
+}
+
+/*
+Backend যদি multipart/form-data নেয়,
+এই অংশটি সেই অনুযায়ী ব্যবহার করবে।
+*/
+
+const form=new FormData();
+
+form.append("match_id",matchId);
+form.append("room_id",roomId);
+form.append("screenshot",file);
+
+try{
+
+const token=localStorage.getItem("token");
+
+const res=await fetch(API_BASE+"/api/winning",{
+method:"POST",
+headers:token?{
+"Authorization":"Bearer "+token
+}:{},
+body:form
+});
+
+const data=await res.json();
+
+if(data.success){
+
+alert("Winning submitted successfully");
+
+}else{
+
+alert(data.message||"Submission failed");
+
+}
+
+}catch(e){
+
+alert("Server connection failed");
+
+}
+
+}
+
+/* ================================
+   SUPPORT
+================================ */
+
+async function sendSupport(){
+
+const message=document.getElementById("supportMessage").value;
+
+if(!message){
+
+alert("Message লিখুন");
+
+return;
+}
+
+const data=await api("/support",{
+method:"POST",
+body:JSON.stringify({
+message
+})
+});
+
+if(data?.success){
+
+alert("Message sent");
+
+document.getElementById("supportMessage").value="";
+
+}else{
+
+alert(data?.message||"Failed");
+
+}
+
+}
+
+/* ================================
+   LOGOUT
+================================ */
+
+function logout(){
+
+localStorage.removeItem("token");
+localStorage.removeItem("lastPage");
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+  </html>

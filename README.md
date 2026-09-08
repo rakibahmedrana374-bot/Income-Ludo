@@ -1,29 +1,11 @@
-# Ludo Master — Admin Ready
+# Ludo Master — API Fixed
 
-## Render
-Build Command: `npm install`
-Start Command: `npm start`
+The frontend is connected to the Render backend:
+https://income-ludo-1.onrender.com
 
-## Environment variables
-Set these on Render:
-- `JWT_SECRET` = long random secret
-- `ADMIN_MOBILE` = your admin mobile
-- `ADMIN_PASSWORD` = a strong admin password
+Extract this ZIP and upload/replace `index.html` in the root of your GitHub Pages repository.
 
-## Admin
-Open:
-`https://YOUR-RENDER-DOMAIN/admin`
+Admin Panel:
+https://income-ludo-1.onrender.com/admin
 
-The admin panel includes:
-- Dashboard
-- Deposit approve/reject
-- Withdraw approve/reject with refund on rejection
-- Match create/delete
-- User list and balances
-- Winning approve/reject and prize credit
-- Support inbox
-- Announcement management
-
-## Database
-This version keeps JSON data in `data/database.json`. `data/.gitkeep` and `uploads/.gitkeep` are included.
-For production real-money use, migrate to PostgreSQL and add proper audit logs, rate limiting, payment verification, role management, and jurisdiction-specific compliance.
+Do not upload the ZIP itself as index.html; extract it first.
