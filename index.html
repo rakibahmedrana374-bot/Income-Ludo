@@ -69,6 +69,8 @@ display:flex;justify-content:space-around;padding:9px 0;z-index:10
 .auth-card label{display:block;margin-top:10px;color:#e5f2ff;font-size:14px}.auth-card input{background:rgba(7,30,80,.86);color:#fff;border:1px solid #2299ff;margin:7px 0 8px}.auth-card input::placeholder{color:#b6cae6}
 .auth-btn{width:100%;padding:14px;margin-top:10px;border-radius:12px;background:linear-gradient(90deg,#0ea5e9,#2563eb);color:#fff;font-weight:700;font-size:17px;box-shadow:0 5px 20px rgba(14,165,233,.25)}
 .auth-switch{text-align:center;margin-top:17px;font-size:14px;color:#c9d8ee}.auth-switch button{background:none;color:#38d9ff;font-weight:700;margin-left:5px}
+.app{display:none}
+.auth-screen{position:relative!important;inset:auto!important;z-index:1!important;min-height:100vh}
 .auth-error,.auth-success{padding:10px;border-radius:9px;font-size:13px;margin:10px 0;display:none}.auth-error{background:rgba(220,38,38,.16);border:1px solid rgba(248,113,113,.5);color:#fecaca}.auth-success{background:rgba(22,163,74,.16);border:1px solid rgba(74,222,128,.5);color:#bbf7d0}
 </style>
 </head>
@@ -323,7 +325,7 @@ const API_BASE = "https://yourdomain.com/api";
 
 
 /* AUTHENTICATION GATE */
-function setAuthVisible(show){const e=document.getElementById("authScreen");if(e)e.style.display=show?"flex":"none";}
+function setAuthVisible(show){const e=document.getElementById("authScreen"),a=document.querySelector(".app");if(e)e.style.display=show?"flex":"none";if(a)a.style.display=show?"none":"block";document.body.style.overflow=show?"auto":"auto";}
 function showAuth(mode){document.getElementById("loginBox").classList.toggle("hidden",mode!=="login");document.getElementById("registerBox").classList.toggle("hidden",mode!=="register");authMessage("loginError","");authMessage("registerError","");}
 function authMessage(id,msg){const e=document.getElementById(id);if(e){e.innerText=msg;e.style.display=msg?"block":"none";}}
 async function loginUser(){
