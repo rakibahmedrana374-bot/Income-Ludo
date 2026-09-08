@@ -1,29 +1,32 @@
-# Ludo Master — Admin Ready
+# Ludo Master Admin Panel v2
 
-## Render
-Build Command: `npm install`
-Start Command: `npm start`
+Admin Panel + updated Render backend.
 
-## Environment variables
-Set these on Render:
-- `JWT_SECRET` = long random secret
-- `ADMIN_MOBILE` = your admin mobile
-- `ADMIN_PASSWORD` = a strong admin password
-
-## Admin
-Open:
-`https://YOUR-RENDER-DOMAIN/admin`
-
-The admin panel includes:
-- Dashboard
+## Features
+- Admin login
+- Dashboard statistics
+- User search and block/unblock
+- Gaming/Winning balance adjustment
 - Deposit approve/reject
 - Withdraw approve/reject with refund on rejection
-- Match create/delete
-- User list and balances
-- Winning approve/reject and prize credit
-- Support inbox
-- Announcement management
+- Match create/edit/delete
+- Room ID and match status
+- Winning approve/reject with prize credit
+- Winning screenshot link
+- Support inbox and replies
+- Announcement create/enable/disable/delete
+- Green action buttons throughout the admin panel
 
-## Database
-This version keeps JSON data in `data/database.json`. `data/.gitkeep` and `uploads/.gitkeep` are included.
-For production real-money use, migrate to PostgreSQL and add proper audit logs, rate limiting, payment verification, role management, and jurisdiction-specific compliance.
+## Render
+Build: `npm install`
+Start: `npm start`
+
+Environment variables:
+- JWT_SECRET
+- ADMIN_MOBILE
+- ADMIN_PASSWORD
+
+Admin URL:
+`https://YOUR-RENDER-DOMAIN/admin`
+
+This version uses JSON storage. For a real-money production service, use a persistent database, proper payment verification, audit logs, access controls, rate limits, backups, and applicable legal/payment compliance.
