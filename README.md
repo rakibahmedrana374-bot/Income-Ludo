@@ -1,20 +1,32 @@
-# Ludo Master — FINAL API + LOGIN FIX
+# Ludo Master Admin Panel v2
 
-Connected backend:
-https://income-ludo-1.onrender.com
+Admin Panel + updated Render backend.
 
-This frontend includes Login/Register and stores the JWT token returned by the Render API.
+## Features
+- Admin login
+- Dashboard statistics
+- User search and block/unblock
+- Gaming/Winning balance adjustment
+- Deposit approve/reject
+- Withdraw approve/reject with refund on rejection
+- Match create/edit/delete
+- Room ID and match status
+- Winning approve/reject with prize credit
+- Winning screenshot link
+- Support inbox and replies
+- Announcement create/enable/disable/delete
+- Green action buttons throughout the admin panel
 
-Install:
-1. Extract this ZIP.
-2. Replace the root index.html in your GitHub repository.
-3. Commit the change.
-4. Wait for GitHub Pages to publish.
-5. Open the GitHub Pages URL.
-6. Register/Login.
-7. Open Match/Tournament.
+## Render
+Build: `npm install`
+Start: `npm start`
 
-Admin:
-https://income-ludo-1.onrender.com/admin
+Environment variables:
+- JWT_SECRET
+- ADMIN_MOBILE
+- ADMIN_PASSWORD
 
-Do not create another Render service.
+Admin URL:
+`https://YOUR-RENDER-DOMAIN/admin`
+
+This version uses JSON storage. For a real-money production service, use a persistent database, proper payment verification, audit logs, access controls, rate limits, backups, and applicable legal/payment compliance.
