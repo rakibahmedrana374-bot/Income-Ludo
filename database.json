@@ -6,5 +6,7 @@
   "transactions": [],
   "winnings": [],
   "support_messages": [],
-  "announcements": []
+  "settings": {
+    "announcement": "স্বাগতম Ludo Master-এ ❤️"
+  }
 }
