@@ -1,41 +1,29 @@
-# Ludo Master — Render Ready
-
-## Files
-- `index.html` — frontend
-- `server.js` — Node.js/Express backend
-- `package.json` — Render dependencies/start command
-- `.env.example` — environment variable example
-- `data/` — JSON database is created automatically
-- `uploads/` — winning screenshots are stored here
+# Ludo Master — Admin Ready
 
 ## Render
-Build Command:
-```text
-npm install
-```
+Build Command: `npm install`
+Start Command: `npm start`
 
-Start Command:
-```text
-npm start
-```
+## Environment variables
+Set these on Render:
+- `JWT_SECRET` = long random secret
+- `ADMIN_MOBILE` = your admin mobile
+- `ADMIN_PASSWORD` = a strong admin password
 
-Environment Variable:
-```text
-JWT_SECRET=your-long-random-secret
-```
+## Admin
+Open:
+`https://YOUR-RENDER-DOMAIN/admin`
 
-## Test
-After deployment open:
-```text
-https://YOUR-SERVICE.onrender.com/api/health
-```
+The admin panel includes:
+- Dashboard
+- Deposit approve/reject
+- Withdraw approve/reject with refund on rejection
+- Match create/delete
+- User list and balances
+- Winning approve/reject and prize credit
+- Support inbox
+- Announcement management
 
-It should return:
-```json
-{"success":true,"message":"Ludo Master backend is running"}
-```
-
-The frontend is served from `/` and uses the same Render service for `/api/...`.
-
-IMPORTANT:
-This JSON database is suitable for testing/demo deployment. Local files on some Render plans can be lost after service replacement/redeploy. For a real money app, use a persistent database and proper admin/security controls.
+## Database
+This version keeps JSON data in `data/database.json`. `data/.gitkeep` and `uploads/.gitkeep` are included.
+For production real-money use, migrate to PostgreSQL and add proper audit logs, rate limiting, payment verification, role management, and jurisdiction-specific compliance.
