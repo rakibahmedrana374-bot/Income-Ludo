@@ -1,32 +1,21 @@
-# Ludo Master Admin Panel v2
+# Ludo Master - Render Ready v2
 
-Admin Panel + updated Render backend.
-
-## Features
-- Admin login
-- Dashboard statistics
-- User search and block/unblock
-- Gaming/Winning balance adjustment
-- Deposit approve/reject
-- Withdraw approve/reject with refund on rejection
-- Match create/edit/delete
-- Room ID and match status
-- Winning approve/reject with prize credit
-- Winning screenshot link
-- Support inbox and replies
-- Announcement create/enable/disable/delete
-- Green action buttons throughout the admin panel
+এই ZIP-এ User App + Admin Panel v2 একসাথে আছে।
 
 ## Render
-Build: `npm install`
-Start: `npm start`
+- Build Command: `npm install`
+- Start Command: `npm start`
+- Environment Variables:
+  - `JWT_SECRET` = একটি শক্তিশালী secret
+  - `ADMIN_MOBILE` = আপনার admin mobile
+  - `ADMIN_PASSWORD` = আপনার admin password
 
-Environment variables:
-- JWT_SECRET
-- ADMIN_MOBILE
-- ADMIN_PASSWORD
+## URLs
+- User App: `/`
+- Admin Panel: `/admin`
+- Health: `/api/health`
 
-Admin URL:
-`https://YOUR-RENDER-DOMAIN/admin`
+## GitHub
+ZIP extract করে সব ফাইল repository root-এ upload করুন। `index.html` অবশ্যই root-এ থাকবে।
 
-This version uses JSON storage. For a real-money production service, use a persistent database, proper payment verification, audit logs, access controls, rate limits, backups, and applicable legal/payment compliance.
+⚠️ Production real-money use-এর আগে persistent database, secure admin credentials, payment verification, audit logs এবং প্রযোজ্য আইন/নিয়ম মেনে security review করুন।
