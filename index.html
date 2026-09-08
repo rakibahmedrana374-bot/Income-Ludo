@@ -52,6 +52,13 @@ display:flex;justify-content:space-around;padding:9px 0;z-index:10
 
 .hidden{display:none!important}
 .copy{background:#eee;padding:8px;border-radius:7px;font-size:13px;margin-top:8px}
+ .auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:#f3f5f9}
+.auth-card{width:100%;max-width:500px;background:#fff;border-radius:18px;padding:22px;box-shadow:0 3px 14px #00000012}
+.auth-card h2{color:#5b21b6;margin-bottom:6px}
+.auth-tabs{display:flex;gap:8px;margin:16px 0}
+.auth-tabs button{flex:1;padding:11px;border-radius:9px;background:#eee}
+.auth-tabs button.active{background:#5b21b6;color:#fff}
+.auth-msg{min-height:20px;margin:8px 0;font-size:14px}
 .danger{color:#dc2626}
 .success{color:#16a34a}
 </style>
@@ -59,7 +66,30 @@ display:flex;justify-content:space-around;padding:9px 0;z-index:10
 
 <body>
 
-<div class="app">
+<div id="authScreen" class="auth-screen">
+<div class="auth-card">
+<h2>🎲 Ludo Master</h2>
+<p>Login অথবা নতুন Account তৈরি করুন</p>
+<div class="auth-tabs">
+<button id="loginTab" class="active" onclick="showAuth('login')">Login</button>
+<button id="registerTab" onclick="showAuth('register')">Register</button>
+</div>
+<div id="loginForm">
+<input id="loginMobile" type="tel" placeholder="Mobile Number">
+<input id="loginPassword" type="password" placeholder="Password">
+<button class="primary" onclick="loginUser()">Login</button>
+</div>
+<div id="registerForm" class="hidden">
+<input id="regName" type="text" placeholder="আপনার নাম">
+<input id="regMobile" type="tel" placeholder="Mobile Number">
+<input id="regPassword" type="password" placeholder="Password">
+<button class="primary" onclick="registerUser()">Create Account</button>
+</div>
+<div id="authMsg" class="auth-msg"></div>
+</div>
+</div>
+
+<div id="mainApp" class="app hidden">
 
 <header>
 <h1>🎲 Ludo Master</h1>
@@ -308,18 +338,20 @@ window.scrollTo(0,0);
 /* Refresh করলে একই page থাকবে */
 
 window.addEventListener("load",()=>{
-
+const token=localStorage.getItem("token");
+if(token){
+document.getElementById("authScreen").classList.add("hidden");
+document.getElementById("mainApp").classList.remove("hidden");
 const last=localStorage.getItem("lastPage");
-
-if(last && pages.includes(last)){
-showPage(last);
-}
-
+if(last && pages.includes(last)) showPage(last);
 loadUser();
 loadBalance();
 loadMatches();
 loadHistory();
-
+}else{
+document.getElementById("authScreen").classList.remove("hidden");
+document.getElementById("mainApp").classList.add("hidden");
+}
 });
 
 /* ================================
@@ -358,6 +390,57 @@ alert("Referral code copied");
 }
 
 /* ================================
+   AUTH
+================================ */
+function showAuth(mode){
+const login=document.getElementById("loginForm");
+const register=document.getElementById("registerForm");
+const loginTab=document.getElementById("loginTab");
+const registerTab=document.getElementById("registerTab");
+document.getElementById("authMsg").innerText="";
+if(mode==="register"){
+login.classList.add("hidden"); register.classList.remove("hidden");
+loginTab.classList.remove("active"); registerTab.classList.add("active");
+}else{
+register.classList.add("hidden"); login.classList.remove("hidden");
+registerTab.classList.remove("active"); loginTab.classList.add("active");
+}
+}
+async function authRequest(path,payload){
+const res=await fetch(API_BASE+"/api"+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+const data=await res.json().catch(()=>({}));
+if(!res.ok) throw new Error(data.message||("Request failed: "+res.status));
+return data;
+}
+async function loginUser(){
+const mobile=document.getElementById("loginMobile").value.trim();
+const password=document.getElementById("loginPassword").value;
+const msg=document.getElementById("authMsg");
+if(!mobile||!password){msg.innerText="Mobile ও Password দিন";return;}
+msg.innerText="Login হচ্ছে...";
+try{
+const data=await authRequest("/auth/login",{mobile,password});
+if(!data.token) throw new Error("Token পাওয়া যায়নি");
+localStorage.setItem("token",data.token);
+location.reload();
+}catch(e){msg.innerText=e.message||"Login failed";}
+}
+async function registerUser(){
+const name=document.getElementById("regName").value.trim();
+const mobile=document.getElementById("regMobile").value.trim();
+const password=document.getElementById("regPassword").value;
+const msg=document.getElementById("authMsg");
+if(!name||!mobile||!password){msg.innerText="সব তথ্য দিন";return;}
+msg.innerText="Account তৈরি হচ্ছে...";
+try{
+const data=await authRequest("/auth/register",{name,mobile,password});
+if(!data.token) throw new Error("Token পাওয়া যায়নি");
+localStorage.setItem("token",data.token);
+location.reload();
+}catch(e){msg.innerText=e.message||"Registration failed";}
+}
+
+/* ================================
    API HELPER
 ================================ */
 
@@ -375,7 +458,10 @@ options.headers={
 
 const res=await fetch(API_BASE+"/api"+path,options);
 
-if(!res.ok) throw new Error("API Error");
+if(!res.ok){
+if(res.status===401){localStorage.removeItem("token");location.reload();}
+throw new Error("API Error ("+res.status+")");
+}
 
 return await res.json();
 

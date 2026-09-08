@@ -1,11 +1,20 @@
-# Ludo Master — API Fixed
+# Ludo Master — FINAL API + LOGIN FIX
 
-The frontend is connected to the Render backend:
+Connected backend:
 https://income-ludo-1.onrender.com
 
-Extract this ZIP and upload/replace `index.html` in the root of your GitHub Pages repository.
+This frontend includes Login/Register and stores the JWT token returned by the Render API.
 
-Admin Panel:
+Install:
+1. Extract this ZIP.
+2. Replace the root index.html in your GitHub repository.
+3. Commit the change.
+4. Wait for GitHub Pages to publish.
+5. Open the GitHub Pages URL.
+6. Register/Login.
+7. Open Match/Tournament.
+
+Admin:
 https://income-ludo-1.onrender.com/admin
 
-Do not upload the ZIP itself as index.html; extract it first.
+Do not create another Render service.
