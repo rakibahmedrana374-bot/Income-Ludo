@@ -43,3 +43,10 @@ This JSON database is suitable for testing/demo deployment. Local files on some 
 
 ## Login System
 A login/registration gate is enabled. The main app interface is hidden until a valid account session is established; the existing JWT-protected profile API validates the session.
+
+
+## Fixed Assets
+Logo and login background use relative `assets/...` paths so they work when the repository is served from a GitHub Pages project subpath.
+
+## Important
+GitHub Pages can serve the frontend and assets, but it cannot run the Node.js/Express API. For real Login/Register and the existing protected features, deploy this same project to Render (or another Node.js host) and use that service URL for the frontend API.
