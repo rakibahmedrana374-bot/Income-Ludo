@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ludo Master Admin v2</title>
+<title>Income Ludo Admin v2</title><link rel="icon" type="image/png" href="income-ludo-logo.png">
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7f5;color:#17201a}
 button{border:0;border-radius:9px;padding:10px 13px;cursor:pointer;font-weight:700}
@@ -20,7 +20,7 @@ table{width:100%;border-collapse:collapse}th,td{padding:9px;border-bottom:1px so
 <button class="primary" style="width:100%" onclick="login()">Login</button><p id="lm" class="bad"></p></div>
 
 <div id="app" class="wrap hidden">
-<div class="top"><h2>🎮 Ludo Master Admin v2</h2><div class="actions"><button class="btn" onclick="loadAll()">↻ Refresh</button><button class="btn-gray" onclick="logout()">Logout</button></div></div>
+<div class="top"><h2 style="display:flex;align-items:center;gap:10px"><img src="income-ludo-logo.png" alt="Income Ludo" style="width:46px;height:46px;object-fit:contain;border-radius:10px">Income Ludo Admin v2</h2><div class="actions"><button class="btn" onclick="loadAll()">↻ Refresh</button><button class="btn-gray" onclick="logout()">Logout</button></div></div>
 <div class="tabs">
 <button class="active" onclick="tab('dash',this)">Dashboard</button><button onclick="tab('users',this)">Users</button><button onclick="tab('money',this)">Deposit/Withdraw</button><button onclick="tab('matches',this)">Matches</button><button onclick="tab('wins',this)">Winning</button><button onclick="tab('support',this)">Support</button><button onclick="tab('ann',this)">Announcement</button>
 </div>
