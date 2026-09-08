@@ -49,6 +49,13 @@ function balance(uid){
   return b;
 }
 
+function generateUserCode(){
+  let code;
+  do { code=String(Math.floor(100000 + Math.random()*900000)); }
+  while(db.users.some(u=>u.user_code===code));
+  return code;
+}
+
 function referral(name,uid){
   const n=String(name||"").replace(/[^a-z0-9]/gi,"").slice(0,5).toUpperCase()||"USER";
   return n+uid;
@@ -79,12 +86,13 @@ app.post("/api/auth/register",async(req,res)=>{
 
   const uid=id(db.users);
   const hash=await bcrypt.hash(password,10);
-  db.users.push({id:uid,name,mobile,password_hash:hash,referral_code:referral(name,uid),created_at:new Date().toISOString()});
+  db.users.push({id:uid,name,mobile,password_hash:hash,user_code:generateUserCode(),referral_code:referral(name,uid),created_at:new Date().toISOString()});
   db.balances.push({user_id:uid,gaming_balance:0,winning_balance:0});
   save();
 
   const token=jwt.sign({id:uid,mobile},SECRET,{expiresIn:"30d"});
-  res.json({success:true,token});
+  const createdUser=db.users.find(u=>Number(u.id)===Number(uid));
+  res.json({success:true,token,user_code:createdUser.user_code});
 });
 
 app.post("/api/auth/login",async(req,res)=>{
@@ -99,7 +107,8 @@ app.post("/api/auth/login",async(req,res)=>{
 app.get("/api/user/profile",auth,(req,res)=>{
   const u=db.users.find(x=>Number(x.id)===Number(req.user.id));
   if(!u) return res.status(404).json({success:false,message:"User not found"});
-  res.json({name:u.name,mobile:u.mobile,referral_code:u.referral_code});
+  if(!u.user_code){ u.user_code=generateUserCode(); save(); }
+  res.json({name:u.name,mobile:u.mobile,user_code:u.user_code,referral_code:u.referral_code});
 });
 
 app.get("/api/user/balance",auth,(req,res)=>res.json(balance(req.user.id)));

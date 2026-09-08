@@ -61,8 +61,9 @@ display:flex;justify-content:space-around;padding:9px 0;z-index:10
 .login-card{width:100%;max-width:430px;position:relative;z-index:2;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(18px);border-radius:28px;padding:28px;box-shadow:0 20px 70px #0008;color:#fff;}
 .brand{text-align:center;margin-bottom:22px}.brand-logo{font-size:58px;filter:drop-shadow(0 0 14px #60a5fa);}.brand h1{font-size:30px;margin:5px 0}.brand p{font-size:13px;opacity:.9;letter-spacing:1px}.tagline{display:inline-block;margin-top:8px;padding:7px 13px;border-radius:99px;background:#ffffff18;border:1px solid #ffffff25;font-size:12px;}
 .login-field{position:relative;margin:10px 0}.login-field .field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px}.login-field input{margin:0;padding:14px 45px 14px 43px;border:1px solid #ffffff30;background:#fff;color:#172033;border-radius:13px;outline:none}.login-field input:focus{border-color:#93c5fd;box-shadow:0 0 0 3px #60a5fa33}.eye{position:absolute;right:8px;top:7px;width:38px;height:38px;border-radius:10px;background:#eef2ff;color:#334155;font-size:18px}.remember-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin:10px 2px 16px}.remember{display:flex;gap:7px;align-items:center}.remember input{width:16px;height:16px}.forgot{color:#bfdbfe;text-decoration:none;cursor:pointer}.login-btn{width:100%;padding:14px;border-radius:13px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font-weight:bold;font-size:16px;box-shadow:0 0 25px #3b82f655}.login-btn span{margin-right:6px}.or{display:flex;align-items:center;gap:10px;margin:18px 0;color:#dbeafe;font-size:12px}.or:before,.or:after{content:"";height:1px;flex:1;background:#ffffff30}.google-btn{width:100%;padding:13px;border-radius:13px;background:#fff;color:#1f2937;font-weight:bold;font-size:14px}.google-logo{font-weight:900;margin-right:8px;font-size:18px}.signup{text-align:center;margin-top:20px;font-size:13px;color:#dbeafe}.signup a{color:#fff;font-weight:bold;cursor:pointer;text-decoration:underline}.auth-msg{min-height:18px;text-align:center;font-size:12px;margin:8px 0}.ludo-pawns{display:flex;justify-content:center;gap:14px;margin:15px 0 4px}.pawn{width:14px;height:14px;border-radius:50%;box-shadow:0 0 14px currentColor}.green{color:#22c55e;background:#22c55e}.yellow{color:#facc15;background:#facc15}.red{color:#ef4444;background:#ef4444}.blue{color:#3b82f6;background:#3b82f6}.dice{font-size:34px;margin-left:5px;vertical-align:middle;filter:drop-shadow(0 0 10px #fff6)}
-.auth-toggle{display:none}.signup-form{display:none}.signup-form.active{display:block}.login-form.hidden-form{display:none}.auth-title{text-align:center;font-size:19px;margin-bottom:12px}
+.profile-code{margin-top:14px;padding:14px;border-radius:14px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd;display:flex;align-items:center;justify-content:space-between;gap:10px;color:#1e3a8a}.profile-code span{font-size:12px;font-weight:600}.profile-code b{font-size:22px;letter-spacing:4px;color:#1d4ed8}.code-note{font-size:11px;color:#64748b;margin-top:7px}.auth-toggle{display:none}.signup-form{display:none}.signup-form.active{display:block}.login-form.hidden-form{display:none}.auth-title{text-align:center;font-size:19px;margin-bottom:12px}
 @media(max-width:520px){.login-screen{padding:14px}.login-card{padding:22px}.brand-logo{font-size:48px}}
+.code-modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:#020617bb;backdrop-filter:blur(8px)}.code-modal.hidden{display:none}.code-modal-box{width:100%;max-width:360px;background:#fff;border-radius:24px;padding:28px;text-align:center;box-shadow:0 25px 80px #0008}.success-icon{width:56px;height:56px;border-radius:50%;margin:0 auto 12px;background:#dcfce7;color:#16a34a;font-size:34px;line-height:56px;font-weight:bold}.code-modal-box h2{color:#172033;margin-bottom:8px}.code-modal-box p{color:#64748b;font-size:13px}.big-user-code{margin:14px 0;padding:15px;border-radius:14px;background:#eff6ff;color:#1d4ed8;font-size:30px;font-weight:800;letter-spacing:7px}.code-warning{margin-bottom:16px!important;color:#b45309!important}.code-modal .login-btn{margin-top:4px}
 </style>
 </head>
 
@@ -101,6 +102,17 @@ display:flex;justify-content:space-around;padding:9px 0;z-index:10
       <button class="login-btn" onclick="signupUser()"><span>✨</span>Create Account</button>
       <div class="signup">Already have an account? <a onclick="showLogin()">Login</a></div>
     </div>
+  </div>
+</div>
+
+<div id="codeModal" class="code-modal hidden">
+  <div class="code-modal-box">
+    <div class="success-icon">✓</div>
+    <h2>Account Created!</h2>
+    <p>আপনার ৬ ডিজিটের User Code:</p>
+    <div id="newUserCode" class="big-user-code">------</div>
+    <p class="code-warning">এই কোডটি সংরক্ষণ করে রাখুন। Profile-এও এটি দেখতে পাবেন।</p>
+    <button class="login-btn" onclick="closeCodeModal()">Continue</button>
   </div>
 </div>
 
@@ -249,6 +261,8 @@ Payment Number:
 
 <p>Name: <b id="userName">User</b></p>
 <p style="margin-top:8px">Mobile: <b id="userMobile">---</b></p>
+<div class="profile-code"><span>🆔 Your 6-Digit User Code</span><b id="userCode">------</b></div>
+<p class="code-note">এই ৬ সংখ্যার কোডটি আপনার Profile-এর পরিচয় নম্বর। সংরক্ষণ করে রাখুন।</p>
 
 <br>
 
@@ -835,9 +849,12 @@ async function signupUser(){
     const data=await res.json();
     if(!data.success) throw new Error(data.message||'Registration failed');
     localStorage.setItem('token',data.token);
-    openMainApp();
+    document.getElementById('newUserCode').innerText=data.user_code||'------';
+    document.getElementById('codeModal').classList.remove('hidden');
+    loadUser();
   }catch(e){authMessage('signupMsg',e.message||'Server connection failed');}
 }
+function closeCodeModal(){document.getElementById('codeModal').classList.add('hidden');openMainApp();}
 function forgotPassword(){alert('Forgot Password: Please contact Support to reset your password.');}
 function googleLogin(){alert('Google Login UI is ready. Connect Google OAuth credentials in the backend to enable real Google authentication.');}
 function openMainApp(){
